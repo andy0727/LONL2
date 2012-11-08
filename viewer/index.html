@@ -81,7 +81,7 @@
 				<img id='egfibersImage' src='gfx/fibers_small.png' style='cursor:pointer;'/> 
 					
 				<div id='egvol'>
-					Single volume. <b>Loading time: *</b><span
+					Single volume. <b>Loading time: *</b> <span
 						class='label label-info viewexample' id='egvollink'>View
 						Example</span>
 				</div>
@@ -134,79 +134,7 @@
 
 	<!-- The viewer -->
 	<div id='viewer' style='display: none;'>
-
 		<ul class='navigation'>
-			<li id='volume' class='navigationLi'><div class='menu'>
-					<div class='pin'>
-						<span class='ui-icon ui-icon-pin-s pinicon'></span>
-					</div>
-
-					<div class='tabbox idTabs' id='volumetabs'>
-						<div class='caption'>VOLUME</div>
-
-						<a href='#volumeTab' class='selected'>Volume</a> <a
-							href='#labelmapTab' id='labelmapSwitch'
-							style='margin-left: 50px;'>Labelmap</a>
-						<div id='volumeTab' class='tabContent'>
-
-
-							<div id='modes' style='width: 130px; float: left;'>
-								<div id='volumerendering'>
-									<img src='gfx/3d.png' />
-								</div>
-								<div id='slicing'>
-									<img src='gfx/2d.png' />
-								</div>
-							</div>
-
-							<div id='colors'
-								style='width: 26px; margin-left: 6px; float: left;'>
-
-								<input id='fgColorVolume' type='hidden'
-									class='color-picker black' size='6' value='#ffffff' /> <input
-									id='bgColorVolume' type='hidden' class='color-picker black'
-									size='6' value='#000000' />
-							</div>
-
-							<div id='opacity-label' class='menuLabel'
-								style='margin-top: 4px; float: left;'>3D Opacity</div>
-							<div id='opacity-volume'
-								style='margin-left: 10px; margin-top: 4px; float: left;'></div>
-
-							<div id='windowlevel-label' class='menuLabel'
-								style='margin-top: 4px; float: left;'>Window/Level</div>
-							<div id='windowlevel-volume'
-								style='margin-left: 10px; margin-top: 4px; float: left;'></div>
-
-							<div class='menuLabel' style='margin-top: 4px; float: left;'>Threshold</div>
-							<div id='threshold-volume'
-								style='margin-left: 10px; margin-top: 4px; float: left;'></div>
-						    
-						    <div style='margin-right: 19px; margin-top: 4px; float: right;'><button id="saveFileButton" type="button" onclick="saveFile()">Save...</button></div>
-							<div style='margin-right: 19px; margin-top: 4px; float: right;'><span id="saveFileInfo"></span></div>
-
-
-						</div>
-						<div id='labelmapTab' class='tabContent' style='display: none'>
-
-
-							<div id='visibility-labelmap' style='width: 130px; float: left;'>
-								<div class='menuLabel' style='margin-top: 4px; float: left;'>Show/Hide</div>
-								<div id='labelmapvisibility' class='eye show-icon'
-									style='margin-left: 6px;'></div>
-							</div>
-
-							<div class='menuLabel' style='margin-top: 4px; float: left;'>Labelmap
-								Opacity</div>
-							<div id='opacity-labelmap'
-								style='margin-left: 10px; margin-top: 4px; float: left;'></div>
-
-
-						</div>
-					</div>
-
-				</div></li>
-
 			<li id='mesh' class='navigationLi'><div class='menu'>
 					<div class='pin'>
 						<span class='ui-icon ui-icon-pin-s pinicon'></span>
@@ -246,41 +174,16 @@
 								Threshold</div>
 							<div id='threshold-scalars'
 								style='margin-left: 10px; margin-top: 4px; float: left;'></div>
-
-						</div>
-
-					</div>
-				</div></li>
-
-			<li id='fibers' class='navigationLi'><div class='menu'>
-					<div class='pin'>
-						<span class='ui-icon ui-icon-pin-s pinicon'></span>
-					</div>
-					<div class='tabbox idTabs'>
-						<div class='caption'>FIBERS</div>
-
-						<a class='fiberstabs selected'>Fibers 1</a>
-
-						<div id='fibers1' class='tabContent'>
-
-							<div id='visibility-fibers'
-								style='width: 140px; float: left; margin-top: 2px;'>
-								<div class='menuLabel' style='margin-top: 4px; float: left;'>Show/Hide</div>
-								<div id='fibersvisibility' class='eye show-icon'
-									style='margin-left: 6px;'></div>
+								
+								
+							<div id= 'drag-function' style= 'margin-top: 20px;margin-right:4px; float:left'>
+								<input id = 'drag' type="checkbox" name="Dragging" value="Drag" />     Drag
 							</div>
-
-							<div class='menuLabel' style='margin-top: 4px; float: left;'>Fiber
-								Length Threshold</div>
-							<div id='threshold-fibers'
-								style='margin-left: 10px; margin-top: 4px; float: left;'></div>
-
-
+							
 						</div>
 
 					</div>
 				</div></li>
-
 		</ul>
 
 
@@ -288,7 +191,7 @@
 		<!--  The renderers. -->
 
 		 <div id='3d' class='threeDRenderer'></div>
-		
+		<!--
 		<div id='sliceX' class='twoDRenderer' style='top: 0%;'>
 			<div id='yellow_slider'></div>
 		</div> 
@@ -298,7 +201,7 @@
 		<div id='sliceZ' class='twoDRenderer' style='top: 66.666%;'>
 			<div id='green_slider'></div>
 		</div> 
-		
+		-->
 
 		<div id='blacklogo'>
 			<a href=''><img src='gfx/back.png' /></a>

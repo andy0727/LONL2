@@ -29,7 +29,8 @@ jQuery(document).ready(function() {
     document.getElementById('pagetitle').style.display = 'none';
   }
   
-  var _example = $_GET('');
+  //CS130 LONI Mengyi Zhu: I edit here
+  var _example = 'bp2_start'; //$_GET('');
   var _file = $_GET('file');
   // parse the url for variables which trigger demos immediately
   if (_example || _file) {
@@ -238,3 +239,4 @@ function selectfiles(files) {
   
   
 };
+

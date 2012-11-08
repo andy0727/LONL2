@@ -6,7 +6,6 @@ jQuery(function() {
   }, 1000);
   
   jQuery('.navigationLi').hover(function() {
-
     if (jQuery('.menu', jQuery(this)).hasClass('menuDisabled')) {
       // if this menu is disabled, don't slide
       return;

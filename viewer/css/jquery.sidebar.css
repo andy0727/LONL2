@@ -35,7 +35,7 @@
 .tabContent {
 	display: block;
 	width: 178px;
-	height: 134px;
+	height: 180px;
 	margin-top: 16px;
 	padding: 10px;
 	border: 1px solid #AFAFAF;
@@ -119,3 +119,5 @@
 .show-icon { width: 16px; height: 18px; background-image: url(../gfx/show.png); }
 
 .hide-icon { width: 16px; height: 18px; background-image: url(../gfx/hide.png); }
+
+.drag-function {cursor:pointer;}

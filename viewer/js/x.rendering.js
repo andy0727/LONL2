@@ -9,7 +9,7 @@ function initializeRenderers(){
   ren3d = new X.renderer3D();
   ren3d.container = '3d';
   ren3d.init();    
-  
+  /*
   sliceX = new X.renderer2D();
   sliceX.container = 'sliceX';
   sliceX.orientation = 'X';
@@ -24,12 +24,60 @@ function initializeRenderers(){
   sliceZ.container = 'sliceZ';
   sliceZ.orientation = 'Z';
   sliceZ.init();  
+*/
 
+    //CS 130 LONI Mengyi Zhu : my code here
+    var _pos = ren3d.interactor.mousePosition;
+	var _id = ren3d.pick(_pos[0],_pos[1]);
+    // render();
+	var _old_color =[0,0,0];
+	var _old_opacity = 1;
+	
+    ren3d.interactor.onMouseDown = function(left,middle,right)
+    {   
+		if(left && jQuery('#drag').attr('checked'))
+		{
+			_pos = ren3d.interactor.mousePosition;
+			_id = ren3d.pick(_pos[0],_pos[1]);
+			if (ren3d.get(_id)){
+				_old_color =ren3d.get(_id).color;
+				_old_opacity = ren3d.get(_id).opacity;
+				ren3d.get(_id).color=[0.5,0.5,0.5];
+				ren3d.get(_id).opacity=0.7;
+			}
+		}
+		
+    };
+	
+	
+	ren3d.interactor.onMouseMove = function(event)
+    {
+		if( ren3d.interactor.leftButtonDown &&  jQuery('#drag').attr('checked'))
+		{
+			
+			_end_pos = ren3d.interactor.mousePosition;
+			if (ren3d.get(_id)){
+				
+				ren3d.get(_id).transform.matrix = new X.matrix(
+			[[1, 0, 0, _end_pos[0] -_pos[0]], [0, 1, 0, (_end_pos[1] -_pos[1])],
+			[0, 0, 1, 1], [0, 0, 0, 1]]); 
+			//ren3d.render(); */
+			configurator();
+			ren3d.get(_id).color = _old_color;
+			ren3d.get(_id).opacity = _old_opacity;
+		
+			}
+		}
+		
+	
+	};
+	
+	//CS 130 LONi mengyi zhu : end of my code
   ren3d.onShowtime = function() {
     
     window.console.log('Loading completed.');
     
-    
+    /*
     if (_data.volume.file != null) {
       
       // show any volume also in 2d
@@ -40,13 +88,10 @@ function initializeRenderers(){
       sliceY.render();
       sliceZ.render();
       
-    }
-    
+    }*/
+   
     setupUi();
     configurator();
-    
-    // render();
-    
   };
   
   //
@@ -54,6 +99,7 @@ function initializeRenderers(){
   //
   // link the 2d renderers to the 3d one by setting the onScroll
   // method. this means, once you scroll in 2d, it upates 3d as well
+  /*
   var _updateThreeDX = function() {
     if (_data.volume.file != null) {
       jQuery('#yellow_slider').slider("option", "value",volume.indexX);
@@ -70,11 +116,12 @@ function initializeRenderers(){
       jQuery('#green_slider').slider("option", "value",volume.indexZ);
     }
   };
-  
+  */
+  /*
   sliceX.onScroll = _updateThreeDX;
   sliceY.onScroll = _updateThreeDY;
-  sliceZ.onScroll = _updateThreeDZ;  
-  
+  sliceZ.onScroll = _updateThreeDZ;  */
+   
 };
 
 function createData() {
@@ -471,3 +518,4 @@ function saveFile() {
 	});
 	
 }
+

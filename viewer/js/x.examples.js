@@ -11,7 +11,7 @@ function loadVol() {
   
   // now the fun part, arrrr
   volume = new X.volume();
-  volume.file = 'http://users.loni.ucla.edu/~pipeline/viewer/data/original.mgh';
+  volume.file = 'http://localhost/data/original.mgh';
   _data.volume.file = volume.file;
   
   ren3d.add(volume);
@@ -44,7 +44,7 @@ function loadShape(isRandom) {
   // now the fun part, yahoooo
   for (i=1; i<=56; i++) {
 	  mesh = new X.mesh();
-	  mesh.file = 'http://users.loni.ucla.edu/~pipeline/viewer/data/fsm/i'+i+'_QEM_SubDiv.fsm';
+	  mesh.file = 'http://localhost/data/fsm/i'+i+'_QEM_SubDiv.fsm';
 	  mesh.color = [Math.random(),Math.random(),Math.random()];
 	  mesh.caption = region[i-1];
 	  _data.mesh.file = mesh.file;
@@ -57,7 +57,7 @@ function loadShape(isRandom) {
   }
   
   
-  ren3d.render();
+   ren3d.render();
   
   configurator = function() {
 
@@ -71,7 +71,7 @@ function loadShape(isRandom) {
 	     [0.15980913879519168, -0.1834973848251334, 0.9699431678814355, 17],
 	     [-0.8456077000154597, 0.48151344295118087, 0.23041792884205461, zoom],
 	     [0, 0, 0, 1]]);
-  };
+  };  
 }
 
 function loadShapeSimple(isRandom) {
@@ -90,7 +90,7 @@ function loadShapeSimple(isRandom) {
   // now the fun part, yahoooo
   for (i=0; i<13; i++) {
 	  mesh = new X.mesh();
-	  mesh.file = 'http://users.loni.ucla.edu/~pipeline/viewer/data/fsm2/'+index[i]+'_QEM_SubDiv.fsm';
+	  mesh.file = 'http://localhost/data/fsm2/'+index[i]+'_QEM_SubDiv.fsm';
 	  mesh.color = [Math.random(),Math.random(),Math.random()];
 	  mesh.caption = region[i];
 	  _data.mesh.file = mesh.file;
@@ -132,7 +132,7 @@ function loadFibers() {
   
   // it's a fibers thingie
   fibers = new X.fibers();
-  fibers.file = 'http://users.loni.ucla.edu/~pipeline/viewer/data/fibers.trk';
+  fibers.file = 'http://localhost/data/fibers.trk';
   fibers.transform.matrix = new X.matrix(
 	   [[1, 0, 0, -130], [0, 6.123031769111886e-17, 1, -130],
 	   [0, -1, 6.123031769111886e-17, 130], [0, 0, 0, 1]]);
@@ -141,9 +141,9 @@ function loadFibers() {
   
   // now the fun part, arrrr
   volume = new X.volume();
-  volume.file = 'http://users.loni.ucla.edu/~pipeline/viewer/data/original.mgh';
-  volume.labelmap.file = 'http://users.loni.ucla.edu/~pipeline/viewer/data/label.mgz';
-  volume.labelmap.colortable.file = 'http://users.loni.ucla.edu/~pipeline/viewer/data/colormap.txt';
+  volume.file = 'http://localhost/data/original.mgh';
+  volume.labelmap.file = 'http://localhost/data/label.mgz';
+  volume.labelmap.colortable.file = 'http://localhost/data/colormap.txt';
   _data.volume.file = volume.file;
   _data.labelmap.file = volume.labelmap.file;
   
@@ -183,9 +183,9 @@ function loadLabelMaps() {
   
   // now the fun part, arrrr
   volume = new X.volume();
-  volume.file = 'http://users.loni.ucla.edu/~pipeline/viewer/data/original.mgh';
-  volume.labelmap.file = 'http://users.loni.ucla.edu/~pipeline/viewer/data/label.mgz';
-  volume.labelmap.colortable.file = 'http://users.loni.ucla.edu/~pipeline/viewer/data/colormap.txt';
+  volume.file = 'http://localhost/data/original.mgh';
+  volume.labelmap.file = 'http://localhost/data/label.mgz';
+  volume.labelmap.colortable.file = 'http://localhost/data/colormap.txt';
   _data.volume.file = volume.file;
   _data.labelmap.file = volume.labelmap.file;
   
