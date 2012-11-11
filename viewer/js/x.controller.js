@@ -364,3 +364,10 @@ function thresholdFibers(event, ui) {
   
 
 }
+
+function SwithRotateorDrag() {
+	if(jQuery('#drag').attr('checked'))
+		ren3d.camera.rotationenable = false;
+	else
+		ren3d.camera.rotationenable = true;
+};

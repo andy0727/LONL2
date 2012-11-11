@@ -52,6 +52,7 @@ function initializeRenderers(){
 	
 	ren3d.interactor.onMouseMove = function(event)
     {
+	
 		if( ren3d.interactor.leftButtonDown &&  jQuery('#drag').attr('checked'))
 		{
 			
@@ -62,13 +63,12 @@ function initializeRenderers(){
 			[[1, 0, 0, _end_pos[0] -_pos[0]], [0, 1, 0, (_end_pos[1] -_pos[1])],
 			[0, 0, 1, 1], [0, 0, 0, 1]]); 
 			//ren3d.render(); */
-			configurator();
 			ren3d.get(_id).color = _old_color;
 			ren3d.get(_id).opacity = _old_opacity;
-		
+			
 			}
 		}
-		
+		//ren3d.camera.rotationenable = true;
 	
 	};
 	
