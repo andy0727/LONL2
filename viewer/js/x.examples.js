@@ -55,9 +55,72 @@ function loadShape(isRandom) {
 	  }
 	  ren3d.add(mesh);
   }
-  
-  
-   ren3d.render();
+    
+   //CS 130 LONI Mengyi Zhu : my code here
+    var pos = ren3d.interactor.mousePosition;
+	var id = ren3d.pick(pos[0],pos[1]);
+	var old_color =[0,0,0];
+	var old_opacity = 1;
+	
+    ren3d.interactor.onMouseDown = function(left,middle,right)
+    {   
+	    //if the action is dragging, record some points.
+		if(left && jQuery('#drag').attr('checked'))
+		{
+			pos = ren3d.interactor.mousePosition;
+			id = ren3d.pick(pos[0],pos[1]);
+			if (ren3d.get(id)){
+				old_color =ren3d.get(id).color;
+				old_opacity = ren3d.get(id).opacity;
+				ren3d.get(id).color=[0.5,0.5,0.5];
+				ren3d.get(id).opacity=0.7;
+				
+			}
+		}
+		
+    };
+	
+	ren3d.interactor.onMouseUp = function(left,middle,right)
+    {};
+	ren3d.interactor.onMouseMove = function(event)
+    {
+	
+		if( ren3d.interactor.leftButtonDown &&  jQuery('#drag').attr('checked'))
+		{
+				end_pos = ren3d.interactor.mousePosition;
+						 
+			if (ren3d.get(id)){
+				camera_view_zoom = ren3d.camera.view.getValueAt(2,3);
+				if(camera_view_zoom < 0)
+					end_coordinate = new X.matrix ([[(end_pos[0] - pos[0])*camera_view_zoom/-760 , 
+											     (-(end_pos[1] - pos[1])*camera_view_zoom/-760) ,
+												 0]]);
+				else
+					end_coordinate = new X.matrix ([[(end_pos[0] - pos[0])/20,
+													-(end_pos[1] - pos[1])*20
+													,0 ]]);
+				rotation_matrix = new X.matrix ([
+									[ren3d.camera.view.getValueAt(0,0), ren3d.camera.view.getValueAt(0,1), ren3d.camera.view.getValueAt(0,2)],
+									[ren3d.camera.view.getValueAt(1,0), ren3d.camera.view.getValueAt(1,1), ren3d.camera.view.getValueAt(1,2)],
+									[ren3d.camera.view.getValueAt(2,0), ren3d.camera.view.getValueAt(2,1), ren3d.camera.view.getValueAt(2,2)]]);	
+			
+				translate_vector =new X.matrix(end_coordinate.multiply(rotation_matrix));
+				
+				transform_matrix = new X.matrix ([[1,0,0,translate_vector.getValueAt(0,0)], 
+											[0,1,0,translate_vector.getValueAt(0,1)],
+											[0,0,1,translate_vector.getValueAt(0,2)],
+											[0,0,0,1]]);
+				window.console.log(ren3d.camera.view);							
+				ren3d.get(id).transform.matrix= new X.matrix(ren3d.get(id).transform.matrix.multiply(transform_matrix));
+				ren3d.get(id).color = old_color;
+				ren3d.get(id).opacity = old_opacity;
+				pos = ren3d.interactor.mousePosition;
+			}
+		}
+		
+		
+	};
+  ren3d.render();
   
   configurator = function() {
 
@@ -65,12 +128,17 @@ function loadShape(isRandom) {
     if (isRandom) {
     	zoom = -600;
     }
-  	
+  	/*ren3d.camera.view = new X.matrix(
+	    [[-1, 0, 0, 0],
+	     [0, 0, 1, 0],
+	     [0, -1, 0, -600],
+	     [0, 0, 0, 1]]);*/
   	ren3d.camera.view = new X.matrix(
-	    [[-0.5093217615929089, -0.8570143021091494, -0.07821655290449646, 10],
-	     [0.15980913879519168, -0.1834973848251334, 0.9699431678814355, 17],
-	     [-0.8456077000154597, 0.48151344295118087, 0.23041792884205461, zoom],
+	    [[-0.5093217615929089, -0.8570143021091494, -0.07821655290449646, 0],
+	     [0.15980913879519168, -0.1834973848251334, 0.9699431678814355, 0],
+	     [-0.8456077000154597, 0.48151344295118087, 0.23041792884205461, -600],
 	     [0, 0, 0, 1]]);
+		 //ren3d.camera.position = [0,0,- 380];
   };  
 }
 
