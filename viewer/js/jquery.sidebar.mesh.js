@@ -38,6 +38,9 @@ jQuery(function() {
   
   //CS 130 LONI TEAM 2 
   jQuery('#drag').click(function() {
-    SwithRotateorDrag();
+    SwitchRotateorDrag();
+  });
+  jQuery('#vhint').click(function(){
+	SwitchVisual();
   });
 });

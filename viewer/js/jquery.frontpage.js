@@ -12,6 +12,7 @@ jQuery(document).ready(function() {
   
   ren3d = null;
   
+	
   has_volume = false;
   has_fibers = false;
   has_mesh = false;
@@ -30,7 +31,7 @@ jQuery(document).ready(function() {
   }
   
   //CS130 LONI Mengyi Zhu: I edit here
-  var _example = $_GET('');//'bp2_start'; //
+  var _example = 'bp2_start'; //$_GET('');
   var _file = $_GET('file');
   // parse the url for variables which trigger demos immediately
   if (_example || _file) {

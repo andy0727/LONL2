@@ -25,18 +25,75 @@ function initializeRenderers(){
   sliceZ.orientation = 'Z';
   sliceZ.init();  
 */
-
-   
+   //CS 130 LONI Mengyi Zhu : my code here
+    pos = ren3d.interactor.mousePosition;
+	id = ren3d.pick(pos[0],pos[1]);
+	old_color =[0,0,0];
+	old_opacity = 1;
+	hint_meshes = [];
+	number_of_piece =0;
+	ren3d.interactor.onMouseDown = function(left,middle,right)
+    {   
+	    //if the action is dragging, record some points.
+		if(left && jQuery('#drag').attr('checked'))
+		{
+			pos = ren3d.interactor.mousePosition;
+			id = ren3d.pick(pos[0],pos[1]);
+			if (ren3d.get(id) && ren3d.get(id).caption != "visual_hint"){
+				old_color =ren3d.get(id).color;
+				old_opacity = ren3d.get(id).opacity;
+				ren3d.get(id).color=[0.5,0.5,0.5];
+				ren3d.get(id).opacity=0.7;
+				
+			}
+		}
+		
+    };
 	
+	ren3d.interactor.onMouseUp = function(left,middle,right)
+    {};
+	
+	ren3d.interactor.onMouseMove = function(event)
+    {
+	
+		if( ren3d.interactor.leftButtonDown &&  jQuery('#drag').attr('checked'))
+		{
+				end_pos = ren3d.interactor.mousePosition;
+						 
+			if (ren3d.get(id)&& ren3d.get(id).caption != "visual_hint"){
+				camera_view_zoom = ren3d.camera.view.getValueAt(2,3);
+				if(camera_view_zoom < 0)
+					end_coordinate = new X.matrix ([[(end_pos[0] - pos[0])*camera_view_zoom/-760 , 
+											     (-(end_pos[1] - pos[1])*camera_view_zoom/-760) ,
+												 0]]);
+				else
+					end_coordinate = new X.matrix ([[(end_pos[0] - pos[0])/20,
+													-(end_pos[1] - pos[1])*20
+													,0 ]]);
+				rotation_matrix = new X.matrix ([
+									[ren3d.camera.view.getValueAt(0,0), ren3d.camera.view.getValueAt(0,1), ren3d.camera.view.getValueAt(0,2)],
+									[ren3d.camera.view.getValueAt(1,0), ren3d.camera.view.getValueAt(1,1), ren3d.camera.view.getValueAt(1,2)],
+									[ren3d.camera.view.getValueAt(2,0), ren3d.camera.view.getValueAt(2,1), ren3d.camera.view.getValueAt(2,2)]]);	
+			
+				translate_vector =new X.matrix(end_coordinate.multiply(rotation_matrix));
+				
+				transform_matrix = new X.matrix ([[1,0,0,translate_vector.getValueAt(0,0)], 
+											[0,1,0,translate_vector.getValueAt(0,1)],
+											[0,0,1,translate_vector.getValueAt(0,2)],
+											[0,0,0,1]]);
+				//window.console.log(ren3d.camera.view);							
+				ren3d.get(id).transform.matrix= new X.matrix(ren3d.get(id).transform.matrix.multiply(transform_matrix));
+				ren3d.get(id).color = old_color;
+				ren3d.get(id).opacity = old_opacity;
+				pos = ren3d.interactor.mousePosition;
+			}
+		}
+	};
 	//CS 130 LONi mengyi zhu : end of my code
   ren3d.onShowtime = function() {
     
-    //window.console.log('Loading completed.');
-    camera_position = ren3d.camera.position;
-	focus_position = ren3d.camera.focus;
-	
-	window.console.log('camera position x: '+ camera_position[0]+ ' y: '+ camera_position[1] + ' z: '+ camera_position[2]+
-						'focus position x: '+ focus_position[0]+ ' y: '+ focus_position[1] + ' z: '+ focus_position[2]);
+    window.console.log('Loading completed.');
+    
     /*
     if (_data.volume.file != null) {
       

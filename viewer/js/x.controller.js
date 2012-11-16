@@ -365,11 +365,19 @@ function thresholdFibers(event, ui) {
 
 }
 
-function SwithRotateorDrag() {
+function SwitchRotateorDrag() {
 	if(jQuery('#drag').attr('checked'))
 		ren3d.camera.rotationenable = false;
 	else
 		ren3d.camera.rotationenable = true;
 };
 
-
+function SwitchVisual() {
+	
+	if(!hint_meshes)
+		return;
+	//window.alert("sometext");
+	for(i =1; i<=number_of_piece; i++)
+		hint_meshes[i].visible = jQuery('#vhint').attr('checked');
+	
+};

@@ -41,6 +41,8 @@ function loadShape(isRandom) {
 
   var region = ['Left superior frontal gyrus', 'Right middle frontal gyrus', 'Right precuneus', 'Cerebellum', 'Left angular gyrus', 'Right cingulate gyrus', 'Left middle temporal gyrus', 'Right lingual gyrus', 'Left superior temporal gyrus', 'Left fusiform gyrus', 'Right superior parietal gyrus', 'Right inferior occipital gyrus', 'Left parahippocampal gyrus', 'Right caudate', 'Left inferior temporal gyrus', 'Brainstem', 'Left superior parietal gyrus', 'Right precentral gyrus', 'Left middle frontal gyrus', 'Left lingual gyrus', 'Left postcentral gyrus', 'Right inferior temporal gyrus', 'Left putamen', 'Right inferior frontal gyrus', 'Right insular cortex', 'Left inferior frontal gyrus', 'Right supramarginal gyrus', 'Right gyrus rectus', 'Left inferior occipital gyrus', 'Right putamen', 'Left superior occipital gyrus', 'Right middle orbitofrontal gyrus', 'Right postcentral gyrus', 'Left precentral gyrus', 'Right lateral orbitofrontal gyrus', 'Left cingulate gyrus', 'Left lateral orbitofrontal gyrus', 'Right fusiform gyrus', 'Left supramarginal gyrus', 'Right parahippocampal gyrus', 'Right superior frontal gyrus', 'Left middle orbitofrontal gyrus', 'Right cuneus', 'Right superior occipital gyrus', 'Left gyrus rectus', 'Right angular gyrus', 'Right middle occipital gyrus', 'Right middle temporal gyrus', 'Left precuneus', 'Left cuneus', 'Left caudate', 'Left hippocampus', 'Right hippocampus', 'Right superior temporal gyrus', 'Left middle occipital gyrus', 'Left insular cortex'];
   
+  //LONI TEAM CAUTION!! WE Have added code to store the visual hints.
+  number_of_piece = 56;
   // now the fun part, yahoooo
   for (i=1; i<=56; i++) {
 	  mesh = new X.mesh();
@@ -54,72 +56,16 @@ function loadShape(isRandom) {
 	  	[0, 0, 1, -300*Math.random()], [0, 0, 0, 1]]);
 	  }
 	  ren3d.add(mesh);
+	  
+	  //HERE IS THE MODIFIED PART
+	  hint_meshes[i] = new X.mesh();
+	  hint_meshes[i].file = 'http://localhost/data/fsm/i'+i+'_QEM_SubDiv.fsm';
+	  hint_meshes[i].color = [0.9,0.9,0.9];
+      hint_meshes[i].opacity = 0.5;
+	  hint_meshes[i].caption = 'visual_hint';
+      hint_meshes[i].visible = false;
+	  ren3d.add(hint_meshes[i]);
   }
-    
-   //CS 130 LONI Mengyi Zhu : my code here
-    var pos = ren3d.interactor.mousePosition;
-	var id = ren3d.pick(pos[0],pos[1]);
-	var old_color =[0,0,0];
-	var old_opacity = 1;
-	
-    ren3d.interactor.onMouseDown = function(left,middle,right)
-    {   
-	    //if the action is dragging, record some points.
-		if(left && jQuery('#drag').attr('checked'))
-		{
-			pos = ren3d.interactor.mousePosition;
-			id = ren3d.pick(pos[0],pos[1]);
-			if (ren3d.get(id)){
-				old_color =ren3d.get(id).color;
-				old_opacity = ren3d.get(id).opacity;
-				ren3d.get(id).color=[0.5,0.5,0.5];
-				ren3d.get(id).opacity=0.7;
-				
-			}
-		}
-		
-    };
-	
-	ren3d.interactor.onMouseUp = function(left,middle,right)
-    {};
-	ren3d.interactor.onMouseMove = function(event)
-    {
-	
-		if( ren3d.interactor.leftButtonDown &&  jQuery('#drag').attr('checked'))
-		{
-				end_pos = ren3d.interactor.mousePosition;
-						 
-			if (ren3d.get(id)){
-				camera_view_zoom = ren3d.camera.view.getValueAt(2,3);
-				if(camera_view_zoom < 0)
-					end_coordinate = new X.matrix ([[(end_pos[0] - pos[0])*camera_view_zoom/-760 , 
-											     (-(end_pos[1] - pos[1])*camera_view_zoom/-760) ,
-												 0]]);
-				else
-					end_coordinate = new X.matrix ([[(end_pos[0] - pos[0])/20,
-													-(end_pos[1] - pos[1])*20
-													,0 ]]);
-				rotation_matrix = new X.matrix ([
-									[ren3d.camera.view.getValueAt(0,0), ren3d.camera.view.getValueAt(0,1), ren3d.camera.view.getValueAt(0,2)],
-									[ren3d.camera.view.getValueAt(1,0), ren3d.camera.view.getValueAt(1,1), ren3d.camera.view.getValueAt(1,2)],
-									[ren3d.camera.view.getValueAt(2,0), ren3d.camera.view.getValueAt(2,1), ren3d.camera.view.getValueAt(2,2)]]);	
-			
-				translate_vector =new X.matrix(end_coordinate.multiply(rotation_matrix));
-				
-				transform_matrix = new X.matrix ([[1,0,0,translate_vector.getValueAt(0,0)], 
-											[0,1,0,translate_vector.getValueAt(0,1)],
-											[0,0,1,translate_vector.getValueAt(0,2)],
-											[0,0,0,1]]);
-				window.console.log(ren3d.camera.view);							
-				ren3d.get(id).transform.matrix= new X.matrix(ren3d.get(id).transform.matrix.multiply(transform_matrix));
-				ren3d.get(id).color = old_color;
-				ren3d.get(id).opacity = old_opacity;
-				pos = ren3d.interactor.mousePosition;
-			}
-		}
-		
-		
-	};
   ren3d.render();
   
   configurator = function() {
@@ -155,6 +101,8 @@ function loadShapeSimple(isRandom) {
   var region_simple = ['Caudate', 'Caudate', 'Cerebellum', 'Insular cortex', 'Insular cortex', 'Occipital lobe', 'Parietal lobe', 'Putamen', 'Putamen', 'Temporal lobe', 'Temporal lobe', 'Thalamus', 'Frontal lobe']; 
   var index = [21, 22, 181, 43, 44, 163, 102, 61, 62, 67, 68, 161, 81];
   
+  //LONI TEAM CAUTION!! WE Have added code to store the visual hints.
+  number_of_piece = 12;
   // now the fun part, yahoooo
   for (i=0; i<13; i++) {
 	  mesh = new X.mesh();
@@ -168,6 +116,15 @@ function loadShapeSimple(isRandom) {
 	  	[0, 0, 1, -300*Math.random()], [0, 0, 0, 1]]);
 	  }
 	  ren3d.add(mesh);
+	  
+	  //HERE IS THE MODIFIED PART
+	  hint_meshes[i] = new X.mesh();
+	  hint_meshes[i].file = 'http://localhost/data/fsm2/'+index[i]+'_QEM_SubDiv.fsm';
+	  hint_meshes[i].color = [0.9,0.9,0.9];
+      hint_meshes[i].opacity = 0.5;
+	  hint_meshes[i].caption = "visual_hint";
+      hint_meshes[i].visible = false;
+	  ren3d.add(hint_meshes[i]);
   }
   
   
