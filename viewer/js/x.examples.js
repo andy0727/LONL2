@@ -29,6 +29,86 @@ function loadVol() {
   
 }
 
+//CS 130 LONI TEAM 2 Mengyi Zhu. This function will be called if the user select the brain puzzle 
+function loadShapeLevel ()
+{
+    switchToLevelSelect();
+	jQuery('#submit').click(function() {
+		if(jQuery('#easy').attr('checked'))
+			loadShapeSimple(true);
+		else if (jQuery('#hard').attr('checked'))
+			loadShape(true);
+		else if (jQuery('#easyend').attr('checked'))
+			loadShapeSimple(false);
+		else if (jQuery('#hardend').attr('checked'))
+			loadShape(false);
+		else if (jQuery('#custom').attr('checked'))
+			loadCustom(true);	
+		else if (jQuery('#customend').attr('checked'))
+			loadCustom(false);	
+	});
+
+}
+function loadCustom(isRandom) {
+
+  // now switch to the viewer
+  switchToViewer();
+  
+  // init renderers
+  initializeRenderers();
+  createData();
+  
+   mesh_ids = [];
+  //LONI TEAM CAUTION!! WE Have added code to store the visual hints.
+  var jtext = document.getElementById('paths').value;
+  if(jtext == null || jtext == "")
+	return;
+	
+  var paths= jtext.split("\n");
+  number_of_piece = paths.length;
+  
+  // now the fun part, yahoooo
+  for (i=0; i<number_of_piece; i++) {
+	if(paths[i].substring(0,4) =="http" ){
+	  mesh = new X.mesh();
+	  mesh.file = paths[i];//'http://localhost/data/fsm/i'+i+'_QEM_SubDiv.fsm';
+	  mesh.color = [Math.random(),Math.random(),Math.random()];
+	  mesh.caption = "customed_piece";
+	  _data.mesh.file = mesh.file;
+	  ren3d.add(mesh);
+	  mesh_ids[i] = mesh.id;
+	   if (isRandom) {
+	  	mesh.transform.matrix = new X.matrix(
+	  	[[1, 0, 0, -300*Math.random()], [0, 1, 0, -300*Math.random()],
+	  	[0, 0, 1, -300*Math.random()], [0, 0, 0, 1]]);
+	  }
+	  //HERE IS THE MODIFIED PART
+	  hint_meshes[i] = new X.mesh();
+	  hint_meshes[i].file = paths[i];
+	  hint_meshes[i].color = [0.9,0.9,0.9];
+      hint_meshes[i].opacity = 0.5;
+	  hint_meshes[i].caption = 'visual_hint';
+      hint_meshes[i].visible = false;
+	  ren3d.add(hint_meshes[i]);
+	}
+  }
+  
+  ren3d.render();
+  
+  configurator = function() {
+    	zoom = -600;
+    
+  	
+  	ren3d.camera.view = new X.matrix(
+	    [[-0.5093217615929089, -0.8570143021091494, -0.07821655290449646, 0],
+	     [0.15980913879519168, -0.1834973848251334, 0.9699431678814355, 0],
+	     [-0.8456077000154597, 0.48151344295118087, 0.23041792884205461, -600],
+	     [0, 0, 0, 1]]);
+  };
+
+  //LONI TEAM 2 add a timestamp
+  start_time= new Date().getTime();
+}
 
 function loadShape(isRandom) {
 
@@ -44,11 +124,11 @@ function loadShape(isRandom) {
   //LONI TEAM CAUTION!! WE Have added code to store the visual hints.
   number_of_piece = 56;
   // now the fun part, yahoooo
-  for (i=1; i<=56; i++) {
+  for (i=0; i<56; i++) {
 	  mesh = new X.mesh();
-	  mesh.file = 'http://localhost/data/fsm/i'+i+'_QEM_SubDiv.fsm';
+	  mesh.file = 'http://localhost/data/fsm/i'+ ( i + 1) +'_QEM_SubDiv.fsm';
 	  mesh.color = [Math.random(),Math.random(),Math.random()];
-	  mesh.caption = region[i-1];
+	  mesh.caption = region[i];
 	  _data.mesh.file = mesh.file;
 	  if (isRandom) {
 	  	mesh.transform.matrix = new X.matrix(
@@ -56,10 +136,10 @@ function loadShape(isRandom) {
 	  	[0, 0, 1, -300*Math.random()], [0, 0, 0, 1]]);
 	  }
 	  ren3d.add(mesh);
-	  
+	  mesh_ids[i] = mesh.id;
 	  //HERE IS THE MODIFIED PART
 	  hint_meshes[i] = new X.mesh();
-	  hint_meshes[i].file = 'http://localhost/data/fsm/i'+i+'_QEM_SubDiv.fsm';
+	  hint_meshes[i].file = 'http://localhost/data/fsm/i'+ ( i+ 1)+'_QEM_SubDiv.fsm';
 	  hint_meshes[i].color = [0.9,0.9,0.9];
       hint_meshes[i].opacity = 0.5;
 	  hint_meshes[i].caption = 'visual_hint';
@@ -86,6 +166,9 @@ function loadShape(isRandom) {
 	     [0, 0, 0, 1]]);
 		 //ren3d.camera.position = [0,0,- 380];
   };  
+  
+  //LONI TEAM 2 add a timestamp
+  start_time= new Date().getTime();
 }
 
 function loadShapeSimple(isRandom) {
@@ -102,7 +185,7 @@ function loadShapeSimple(isRandom) {
   var index = [21, 22, 181, 43, 44, 163, 102, 61, 62, 67, 68, 161, 81];
   
   //LONI TEAM CAUTION!! WE Have added code to store the visual hints.
-  number_of_piece = 12;
+  number_of_piece = 13;
   // now the fun part, yahoooo
   for (i=0; i<13; i++) {
 	  mesh = new X.mesh();
@@ -116,7 +199,7 @@ function loadShapeSimple(isRandom) {
 	  	[0, 0, 1, -300*Math.random()], [0, 0, 0, 1]]);
 	  }
 	  ren3d.add(mesh);
-	  
+	  mesh_ids[i] = mesh.id;
 	  //HERE IS THE MODIFIED PART
 	  hint_meshes[i] = new X.mesh();
 	  hint_meshes[i].file = 'http://localhost/data/fsm2/'+index[i]+'_QEM_SubDiv.fsm';
@@ -143,6 +226,9 @@ function loadShapeSimple(isRandom) {
 	     [-0.8456077000154597, 0.48151344295118087, 0.23041792884205461, zoom],
 	     [0, 0, 0, 1]]);
   };
+  
+  //LONI TEAM 2 add a timestamp
+  start_time= new Date().getTime();
 }
 
 

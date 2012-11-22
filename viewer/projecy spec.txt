@@ -1,0 +1,51 @@
+index.html
+     I deleted a lot of things first of all. Some are commented out. (like the sliders on the right part of the screen)
+	 I completely deleted the other menus on the lelft margin.
+	 I added three things in viewer starting with line 179. Dragging checkbox, hint checkbox and end-game button.
+	 I added a new intermediate page betweeen viewer and frontpage, at line 220. (According to our mentor, it needs to be refined.)
+	 
+Jquery.sidebar.css
+     I modified the .tableContent class's height. If you recover the menu on the left margin of the viewer, there will be a problem.
+	 but it is a easy fix. You should be able to figure out.
+
+x.controller.js
+	in SetupUI, I commented out all the things not needed. They are for the other two menu I deleted from the viewer.
+	           also, for mesh menu I commented out scalar and color bar. Because they are disabled anyways.
+			   
+	I leave most of the function there. Although we are only use the function after line 272. They don't bother.
+	From line 272 are the functions to apply all over the project.
+	For changing opacity, I modified toggleMeshVisibility() , meshColor(hex, rgb) and opacityMesh(event, ui).
+	
+	From line 367, these are functions that I wrote. The function name should be pretty clear to what they are doing.
+	Please ask me if you have questions on those functions.
+	
+jquery.sidebar.mesh.js
+    this class include all the event handler function for mesh menu.
+	My part start at line 41. Please refer to x.controller.js to see what they do.
+	
+x.examples.js
+	4 functions modified. 
+		loadShapeLevel () switch from frontpage to levelselect page. Also add a event handler to decide the level.
+	    loadCustom(IsRandom) will load the files user given, and do stuff similar to other functions.
+		loadShape(IsRandom) and LoadShapeSimple (IsRandom) are modified. I added:
+			number_of_piece , indicates how many pieces are loaded. Needed for visual hint and end game.
+			hint_meshes, store special mesh as hint and needed for visual hint.
+			mesh_ids[i], store the id of each piece. Needed for end game calculation to compare combinations.
+			start_time, store the time finish loading and start the game. Needed for time score calculation.
+			
+x.rendering.js
+	Commented a lot of things. all variable that I used are declared here. 
+	Added a line to call to initialize the dragging and selecting events in initializeRenderers().
+	Please see x.controller of what they did.
+	
+	initExamples()
+		contains eventhandler for frontpage. Modified to change if you choose brain puzzle at front page, switch to levelselect page now.
+		
+	switchToViewer() and switchToLevelSelect()
+		are all changed to show or hide the desired page.
+		
+
+	
+	
+
+	

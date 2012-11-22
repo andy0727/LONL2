@@ -158,7 +158,7 @@
 							<div class='menuLabel' style='margin-top: 4px; float: left;'>Opacity</div>
 							<div id='opacity-mesh'
 								style='margin-left: 10px; margin-top: 4px; float: left;'></div>
-
+                            <!--
 							<div class='menuLabel'
 								style='margin-top: 4px; float: left; margin-top: 10px;'>Scalars</div>
 							<div id='scalars-mesh' style='width: 160px; float: left;'>
@@ -175,14 +175,19 @@
 							<div id='threshold-scalars'
 								style='margin-left: 10px; margin-top: 4px; float: left;'></div>
 								
-								
-							<div id= 'drag-function' style= 'margin-top: 20px;margin-right:4px; float:left'>
+							-->	
+							<div id= 'drag-function' style= 'margin-top: 20px;margin-right:10px; float:left'>
 								<input id = 'drag' type="checkbox" name="Dragging" value="Drag" />     Drag
 								
 							</div>
-							<div id= 'visual-hint' style= 'margin-top: 20px;margin-right:4px; float:left'>
+							<div id= 'visual-hint' style= 'margin-top: 20px; margin-right:10px; float:left'>
 								<input id = 'vhint' type="checkbox" name="vhint" value="vhint" />     Visual Hint
 							</div>
+							
+							<div id= 'end-game' style= 'margin-top: 20px; margin-right:10px;float:left'>
+								<input id = 'end-game' type="button" name="end-game" value="end-game" /> 
+							</div>
+							
 						</div>
 
 					</div>
@@ -212,6 +217,28 @@
 
 	</div>
 	
+	<!-- When enter brain puzzle, enter this page first. By LONI team 2-->
+	<div id='levelSelect' style = 'display: none;'>
+		<div id='content' class='container' style=''>
+
+
+			<div id='pagetitle' class='hero-unit'>
+				<h2>Brain Puzzle</h2>
+				<p>Please select a level or choose to see the sample of a brain .</p>
+			</div>
+			<div id='selection' class = 'container' style='font-size: 20px'>
+					<input type="radio" name="level" id='easy' value="EASY">13 pieces<br><br>
+					<input type="radio" name="level" id='hard' value="Hard">56 pieces<br><br>
+					<input type="radio" name="level" id='easyend' value="EASYEND">13 pieces answer<br><br>
+					<input type="radio" name="level" id='hardend' value="HARDEND">56 pieces answer<br><br>
+					<input type="radio" name="level" id='custom' value="Custom">User input<br><br>
+					<input type="radio" name="level" id='customend' value="CustomEND">User input answer<br><br>
+					File Path: <br>
+					<textarea name ="paths" id="paths" rows="10" cols="100"> </textarea><br><br>
+					<input type="submit" value="Submit" id='submit' style= "width: 80px; height: 60px; font-size: 20px">
+			</div>
+	
+	</div>
 	<div id="browser-dialog" style='display: none;' title="Incompatible Browser">
 	<p>This website uses WebGL to render 3D images. Currently only Chrome and Firefox browsers are supported. Using other browsers may slow down or crash your operating system.</p>
 	</div>

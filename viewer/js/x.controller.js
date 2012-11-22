@@ -2,7 +2,7 @@
  * Setup all UI elements once the loading was completed.
  */
 function setupUi() {
-
+  /*
   // VOLUME
   if (_data.volume.file != null) {
     
@@ -73,7 +73,7 @@ function setupUi() {
     jQuery('#labelmapSwitch').hide();
     
   }
-
+  */
   // MESH
   if (_data.mesh.file != null) {
     
@@ -97,7 +97,7 @@ function setupUi() {
     }
   
   }
-  
+  /*
   // SCALARS
   if (_data.scalars.file != null) {
     
@@ -142,7 +142,7 @@ function setupUi() {
     }
     
   }
-  
+  */
 }
 
 function volumerenderingOnOff(bool) {
@@ -271,36 +271,36 @@ function toggleLabelmapVisibility() {
 
 //
 // MESH
-//
+// Modified by Loni team 2 Mengyi Zhu
 function toggleMeshVisibility() {
 
-  if (!mesh) {
+  if (!ren3d.get(id)) {
     return;
   }
   
-  mesh.visible = !mesh.visible;
+  ren3d.get(id).visible = !ren3d.get(id).visible;
   
 
 }
 
 function meshColor(hex, rgb) {
 
-  if (!mesh) {
+  if (!ren3d.get(id)) {
     return;
   }
-  
-  mesh.color = [rgb.r / 255, rgb.g / 255, rgb.b / 255];
+  if(ren3d.get(id).caption != "visual_hint")
+	ren3d.get(id).color = [rgb.r / 255, rgb.g / 255, rgb.b / 255];
   
 
 }
 
 function opacityMesh(event, ui) {
 
-  if (!mesh) {
+  if (!ren3d.get(id)) {
     return;
   }
   
-  mesh.opacity = ui.value / 100;
+  ren3d.get(id).opacity = ui.value / 100;
   
 
 }
@@ -364,20 +364,151 @@ function thresholdFibers(event, ui) {
   
 
 }
+//LONI TEAM 2 Mengyi Zhu
+function InitialEvents(){
+	ren3d.interactor.onMouseDown = function(left,middle,right)
+    {   
+	    //if the action is dragging, record some points.
+		if(left && jQuery('#drag').attr('checked'))
+		{
+			pos = ren3d.interactor.mousePosition;
+			id = ren3d.pick(pos[0],pos[1]);
+			if (ren3d.get(id) && ren3d.get(id).caption != "visual_hint"){
+				old_color =ren3d.get(id).color;
+				old_opacity = ren3d.get(id).opacity;
+				ren3d.get(id).color=[0.5,0.5,0.5];
+				ren3d.get(id).opacity=0.7;
+				
+			}
+		}
+		
+    };
+	
+	ren3d.interactor.onMouseUp = function(left,middle,right)
+    {		
+		if (ren3d.get(id) && ren3d.get(id).caption != "visual_hint"){
+			ren3d.get(id).color = old_color;
+			ren3d.get(id).opacity = old_opacity;
+			
+		}
+	};
+	
+	ren3d.interactor.onMouseMove = function(event)
+    {
+	
+		if( ren3d.interactor.leftButtonDown &&  jQuery('#drag').attr('checked'))
+		{
+				end_pos = ren3d.interactor.mousePosition;
+						 
+			if (ren3d.get(id)&& ren3d.get(id).caption != "visual_hint"){
+				camera_view_zoom = ren3d.camera.view.getValueAt(2,3);
+				if(camera_view_zoom < 0)
+					end_coordinate = new X.matrix ([[(end_pos[0] - pos[0])*camera_view_zoom/-760 , 
+											     (-(end_pos[1] - pos[1])*camera_view_zoom/-760) ,
+												 0]]);
+				else
+					end_coordinate = new X.matrix ([[(end_pos[0] - pos[0])/20,
+													-(end_pos[1] - pos[1])*20
+													,0 ]]);
+				rotation_matrix = new X.matrix ([
+									[ren3d.camera.view.getValueAt(0,0), ren3d.camera.view.getValueAt(0,1), ren3d.camera.view.getValueAt(0,2)],
+									[ren3d.camera.view.getValueAt(1,0), ren3d.camera.view.getValueAt(1,1), ren3d.camera.view.getValueAt(1,2)],
+									[ren3d.camera.view.getValueAt(2,0), ren3d.camera.view.getValueAt(2,1), ren3d.camera.view.getValueAt(2,2)]]);	
+			
+				translate_vector =new X.matrix(end_coordinate.multiply(rotation_matrix));
+				
+				transform_matrix = new X.matrix ([[1,0,0,translate_vector.getValueAt(0,0)], 
+											[0,1,0,translate_vector.getValueAt(0,1)],
+											[0,0,1,translate_vector.getValueAt(0,2)],
+											[0,0,0,1]]);
+				//window.console.log(ren3d.camera.view);							
+				ren3d.get(id).transform.matrix= new X.matrix(ren3d.get(id).transform.matrix.multiply(transform_matrix));
+				ren3d.get(id).color = old_color;
+				ren3d.get(id).opacity = old_opacity;
+				pos = ren3d.interactor.mousePosition;
+			}
+		}
+	};
+}
 
 function SwitchRotateorDrag() {
 	if(jQuery('#drag').attr('checked'))
 		ren3d.camera.rotationenable = false;
 	else
 		ren3d.camera.rotationenable = true;
-};
+}
 
 function SwitchVisual() {
 	
 	if(!hint_meshes)
 		return;
 	//window.alert("sometext");
-	for(i =1; i<=number_of_piece; i++)
-		hint_meshes[i].visible = jQuery('#vhint').attr('checked');
+	for(i =0 ; i<number_of_piece; i++)
+		if(hint_meshes[i])
+			hint_meshes[i].visible = jQuery('#vhint').attr('checked');
 	
-};
+}
+
+
+function CalculateTimeScore(){
+	var end_time =new Date().getTime();
+	var time_difference = end_time - start_time;
+	var time_allowance = 30*60*1000; //half an hour
+	
+	if (time_difference < time_allowance)
+	   return 100;
+	   
+	else if (time_difference > time_allowance && time_difference < 4*time_allowance)
+		return Math.round ((1- (time_difference- time_allowance) / (3*time_allowance)) * 1000)/10;
+		
+	else 
+		return 0;
+}
+function CalculateDistance(id1, id2 , error_range){
+	if 	((Math.abs (ren3d.get(id1).transform.matrix.getValueAt(0,3) - ren3d.get(id2).transform.matrix.getValueAt(0,3)) > error_range) || 
+			(Math.abs (ren3d.get(id1).transform.matrix.getValueAt(1,3) - ren3d.get(id2).transform.matrix.getValueAt(1,3)) > error_range) ||
+			(Math.abs (ren3d.get(id1).transform.matrix.getValueAt(2,3) - ren3d.get(id2).transform.matrix.getValueAt(2,3)) > error_range)
+		)
+		return 1;
+		
+	else
+		return 0;
+						 
+						
+	
+}
+
+function CalculateCombinationScore(){
+	var cur_mini= -1;
+	var cur_id = mesh_ids[0];
+    var potential_mini = 0;
+	var error_range = 30;
+	//use this double loop to find a piece that is closest to all the other pieces.
+	for (i = 0; i < number_of_piece; i++){
+	
+		for (j = 0; j < number_of_piece; j++)
+			potential_mini += CalculateDistance(mesh_ids[i], mesh_ids[j], error_range);
+		
+		if((potential_mini < cur_mini) || cur_mini == -1)
+		{
+			cur_mini = potential_mini;
+			cur_id = mesh_ids[i];
+		}
+	}
+	
+	return 100 - Math.round(cur_mini * (100/ (number_of_piece - 1))* 10)/ 10;
+}
+
+function CalculateScores() {
+	
+	
+    var score = (CalculateTimeScore() + CalculateCombinationScore())/ 2;
+	//this need to be modified because the time is only one of the factor.
+	
+	window.alert("Congratulation! your score is: "+ score + "\n" + 
+	             "time score: "+ CalculateTimeScore() +
+				 "\ncombo score: "+ CalculateCombinationScore()+"\n" );
+	
+}
+
+

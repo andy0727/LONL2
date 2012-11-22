@@ -1,2 +1,0 @@
-jquery.sidebar.css
-_example in Jquery.frontpage.js decide what you want to load, bp2_start is easy puzzle, bp_start is hard, $GET('') is default

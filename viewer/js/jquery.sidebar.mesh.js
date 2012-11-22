@@ -26,7 +26,7 @@ jQuery(function() {
     slide: opacityMesh
   });
   jQuery("#opacity-mesh").width(140);
-  
+  /*
   jQuery("#threshold-scalars").dragslider({
     range: true,
     rangeDrag: true,
@@ -35,12 +35,19 @@ jQuery(function() {
     slide: thresholdScalars
   });
   jQuery("#threshold-scalars").width(140);
+  */
   
   //CS 130 LONI TEAM 2 
   jQuery('#drag').click(function() {
     SwitchRotateorDrag();
   });
+  
   jQuery('#vhint').click(function(){
 	SwitchVisual();
   });
+  
+  jQuery('#end-game').click(function(){
+	CalculateScores();
+  });
+  
 });

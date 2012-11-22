@@ -11,7 +11,7 @@ jQuery(document).ready(function() {
   initExamples();
   
   ren3d = null;
-  
+ 
 	
   has_volume = false;
   has_fibers = false;
@@ -30,8 +30,7 @@ jQuery(document).ready(function() {
     document.getElementById('pagetitle').style.display = 'none';
   }
   
-  //CS130 LONI Mengyi Zhu: I edit here
-  var _example = 'bp2_start'; //$_GET('');
+  var _example = $_GET('');
   var _file = $_GET('file');
   // parse the url for variables which trigger demos immediately
   if (_example || _file) {
@@ -110,11 +109,12 @@ function initExamples() {
   
   jQuery('#egshapeImage').click(function() {
 
-    loadShape(false);
+	loadShapeLevel ();
+    //loadShape(false);
   });
   jQuery('#egshapelink').click(function() {
-
-    loadShape(false);
+	loadShapeLevel ();
+    //loadShape(false);
   });
   
   jQuery('#egfibersImage').click(function() {
@@ -226,6 +226,7 @@ function switchToViewer() {
 
   jQuery('#body').addClass('viewerBody');
   jQuery('#frontpage').hide();
+  jQuery('#levelSelect').hide();
   jQuery('#viewer').show();
   
 };
@@ -241,3 +242,11 @@ function selectfiles(files) {
   
 };
 
+//LONI TEAM 2 Mengyi Zhu
+function switchToLevelSelect() {
+
+  //jQuery('#body').addClass('viewerBody');
+  jQuery('#frontpage').hide();
+  jQuery('#levelSelect').show();
+  
+};
