@@ -45,6 +45,10 @@ jQuery(function() {
   jQuery('#vhint').click(function(){
 	SwitchVisual();
   });
+
+  jQuery('#thint').click(function(){
+    SwitchTextual();
+  });
   
   jQuery('#end-game').click(function(){
 	CalculateScores();

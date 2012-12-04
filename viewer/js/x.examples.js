@@ -34,17 +34,17 @@ function loadShapeLevel ()
 {
     switchToLevelSelect();
 	jQuery('#submit').click(function() {
-		if(jQuery('#easy').attr('checked'))
+		if(jQuery('#easy').attr('checked') && !jQuery('#showAnswer').attr('checked'))
 			loadShapeSimple(true);
-		else if (jQuery('#hard').attr('checked'))
+		else if (jQuery('#hard').attr('checked') && !jQuery('#showAnswer').attr('checked'))
 			loadShape(true);
-		else if (jQuery('#easyend').attr('checked'))
+		else if (jQuery('#easy').attr('checked') && jQuery('#showAnswer').attr('checked'))
 			loadShapeSimple(false);
-		else if (jQuery('#hardend').attr('checked'))
+		else if (jQuery('#hard').attr('checked') && jQuery('#showAnswer').attr('checked'))
 			loadShape(false);
-		else if (jQuery('#custom').attr('checked'))
+		else if (jQuery('#custom').attr('checked') && !jQuery('#showAnswer').attr('checked'))
 			loadCustom(true);	
-		else if (jQuery('#customend').attr('checked'))
+		else if (jQuery('#custom').attr('checked') && jQuery('#showAnswer').attr('checked'))
 			loadCustom(false);	
 	});
 
@@ -66,6 +66,7 @@ function loadCustom(isRandom) {
 	
   var paths= jtext.split("\n");
   number_of_piece = paths.length;
+  var sign = [1,1,1];
   
   // now the fun part, yahoooo
   for (i=0; i<number_of_piece; i++) {
@@ -73,14 +74,27 @@ function loadCustom(isRandom) {
 	  mesh = new X.mesh();
 	  mesh.file = paths[i];//'http://localhost/data/fsm/i'+i+'_QEM_SubDiv.fsm';
 	  mesh.color = [Math.random(),Math.random(),Math.random()];
-	  mesh.caption = "customed_piece";
+	  mesh.caption = '';
 	  _data.mesh.file = mesh.file;
 	  ren3d.add(mesh);
 	  mesh_ids[i] = mesh.id;
-	   if (isRandom) {
-	  	mesh.transform.matrix = new X.matrix(
-	  	[[1, 0, 0, -300*Math.random()], [0, 1, 0, -300*Math.random()],
-	  	[0, 0, 1, -300*Math.random()], [0, 0, 0, 1]]);
+	  
+	  if (isRandom) {
+	    //QIN: add a sign so that random move is in all direction
+		for(j=0;j<3;j++)
+		{
+			rand = Math.random();
+			if(rand>0.5){
+				sign[j]=-1;
+			}
+			else
+				sign[j]=1;  
+		}
+	   
+	   
+	  	 mesh.transform.matrix = new X.matrix(
+		[[1, 0, 0, -300*Math.random()*sign[0]], [0, 1, 0, -300*Math.random()*sign[1]],
+		[0, 0, 1, -300*Math.random()*sign[2]], [0, 0, 0, 1]]);
 	  }
 	  //HERE IS THE MODIFIED PART
 	  hint_meshes[i] = new X.mesh();
@@ -90,6 +104,8 @@ function loadCustom(isRandom) {
 	  hint_meshes[i].caption = 'visual_hint';
       hint_meshes[i].visible = false;
 	  ren3d.add(hint_meshes[i]);
+	  // by Ding Zhao
+      hint_texts[i] = 'custom_piece';
 	}
   }
   
@@ -123,17 +139,29 @@ function loadShape(isRandom) {
   
   //LONI TEAM CAUTION!! WE Have added code to store the visual hints.
   number_of_piece = 56;
+  var sign =[1,1,1];
   // now the fun part, yahoooo
   for (i=0; i<56; i++) {
 	  mesh = new X.mesh();
 	  mesh.file = 'http://localhost/data/fsm/i'+ ( i + 1) +'_QEM_SubDiv.fsm';
 	  mesh.color = [Math.random(),Math.random(),Math.random()];
-	  mesh.caption = region[i];
+	  mesh.caption = '';
 	  _data.mesh.file = mesh.file;
 	  if (isRandom) {
-	  	mesh.transform.matrix = new X.matrix(
-	  	[[1, 0, 0, -300*Math.random()], [0, 1, 0, -300*Math.random()],
-	  	[0, 0, 1, -300*Math.random()], [0, 0, 0, 1]]);
+		 //QIN: add a sign so that random move is in all direction
+		for(j=0;j<3;j++)
+		{
+			rand = Math.random();
+			if(rand>0.5){
+				sign[j]=-1;
+			}
+			else
+				sign[j]=1;
+		}
+	  
+	   mesh.transform.matrix = new X.matrix(
+      [[1, 0, 0, -300*Math.random()*sign[0]], [0, 1, 0, -300*Math.random()*sign[1]],
+      [0, 0, 1, -300*Math.random()*sign[2]], [0, 0, 0, 1]]);
 	  }
 	  ren3d.add(mesh);
 	  mesh_ids[i] = mesh.id;
@@ -145,6 +173,8 @@ function loadShape(isRandom) {
 	  hint_meshes[i].caption = 'visual_hint';
       hint_meshes[i].visible = false;
 	  ren3d.add(hint_meshes[i]);
+
+    hint_texts[i] = region[i];
   }
   ren3d.render();
   
@@ -186,17 +216,30 @@ function loadShapeSimple(isRandom) {
   
   //LONI TEAM CAUTION!! WE Have added code to store the visual hints.
   number_of_piece = 13;
+  var sign = [1,1,1];
   // now the fun part, yahoooo
   for (i=0; i<13; i++) {
 	  mesh = new X.mesh();
 	  mesh.file = 'http://localhost/data/fsm2/'+index[i]+'_QEM_SubDiv.fsm';
 	  mesh.color = [Math.random(),Math.random(),Math.random()];
-	  mesh.caption = region[i];
+	  mesh.caption = '';
 	  _data.mesh.file = mesh.file;
 	  if (isRandom) {
-	  	mesh.transform.matrix = new X.matrix(
-	  	[[1, 0, 0, -300*Math.random()], [0, 1, 0, -300*Math.random()],
-	  	[0, 0, 1, -300*Math.random()], [0, 0, 0, 1]]);
+	  //QIN: add a sign so that random move is in all direction
+		for(j=0;j<3;j++){
+			rand = Math.random();
+			if(rand>0.5){
+				sign[j]=-1;
+			}
+			else
+			sign[j]=1;
+        
+		}
+		
+	  
+	    mesh.transform.matrix = new X.matrix(
+	  	[[1, 0, 0, -300*Math.random()*sign[0]], [0, 1, 0, -300*Math.random()*sign[1]],
+	  	[0, 0, 1, -300*Math.random()*sign[2]], [0, 0, 0, 1]]);
 	  }
 	  ren3d.add(mesh);
 	  mesh_ids[i] = mesh.id;
@@ -208,6 +251,8 @@ function loadShapeSimple(isRandom) {
 	  hint_meshes[i].caption = "visual_hint";
       hint_meshes[i].visible = false;
 	  ren3d.add(hint_meshes[i]);
+
+    hint_texts[i] = region[i];
   }
   
   

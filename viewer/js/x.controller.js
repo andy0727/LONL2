@@ -389,10 +389,28 @@ function InitialEvents(){
 		if (ren3d.get(id) && ren3d.get(id).caption != "visual_hint"){
 			ren3d.get(id).color = old_color;
 			ren3d.get(id).opacity = old_opacity;
+			//Qin:Added to notify player if a piece is connected to other pieces
+			if(jQuery('#drag').attr('checked')){
+				for (i = 0; i < number_of_piece; i++){
+  
+					if(mesh_ids[i]!=id && CalculateDistance(mesh_ids[i],id,30) == 0)
+					{
+					ren3d.get(mesh_ids[i]).color=ren3d.get(id).color; 
+					console.log("Connected!");
+					}
+				}
+			}
+	
+			// By Ding zhao, we calculate scores every move.
+			// If score is 100 for combination, finish automatically.
+			if(CalculateCombinationScore() == 100)
+				CalculateScores();
 			
 		}
 	};
 	
+	
+    
 	ren3d.interactor.onMouseMove = function(event)
     {
 	
@@ -442,12 +460,42 @@ function SwitchVisual() {
 	
 	if(!hint_meshes)
 		return;
-	//window.alert("sometext");
+
 	for(i =0 ; i<number_of_piece; i++)
 		if(hint_meshes[i])
 			hint_meshes[i].visible = jQuery('#vhint').attr('checked');
 	
 }
+
+// By Ding Zhao, enable/disable textual.
+function SwitchTextual() {
+  
+  if(!hint_texts)
+    return;
+  //window.alert("sometext");
+  if(jQuery('#thint').attr('checked'))
+  {
+    for(i = 0 ; i < number_of_piece; i++)
+    {
+      if(hint_texts[i])
+        {
+          ren3d.get(mesh_ids[i]).caption = hint_texts[i];
+        }
+    }
+  }
+  else
+  {
+    for(i = 0 ; i < number_of_piece; i++)
+    {
+      if(hint_texts[i])
+        {
+          ren3d.get(mesh_ids[i]).caption = '';
+        }
+    }
+  }
+  
+}
+
 
 
 function CalculateTimeScore(){
@@ -494,6 +542,7 @@ function CalculateCombinationScore(){
 			cur_mini = potential_mini;
 			cur_id = mesh_ids[i];
 		}
+	potential_mini = 0;
 	}
 	
 	return 100 - Math.round(cur_mini * (100/ (number_of_piece - 1))* 10)/ 10;

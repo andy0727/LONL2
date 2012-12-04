@@ -248,5 +248,20 @@ function switchToLevelSelect() {
   //jQuery('#body').addClass('viewerBody');
   jQuery('#frontpage').hide();
   jQuery('#levelSelect').show();
+  jQuery('#showAns').show();
+  jQuery('#custom').click(function() {
+    jQuery('#submitFile').show();
+    jQuery('#submitChoice').show();
+  });
+
+  jQuery('#easy').click(function() {
+    jQuery('#submitFile').hide();
+    jQuery('#submitChoice').show();
+  });
+
+  jQuery('#hard').click(function() {
+    jQuery('#submitFile').hide();
+    jQuery('#submitChoice').show();
+  });
   
 };

@@ -33,6 +33,7 @@ function initializeRenderers(){
   old_color =[0,0,0];
   old_opacity = 1;
   hint_meshes = [];
+  hint_texts = [];
   mesh_ids = [];
   number_of_piece =0;
   InitialEvents();

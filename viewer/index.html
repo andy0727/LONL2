@@ -184,6 +184,10 @@
 								<input id = 'vhint' type="checkbox" name="vhint" value="vhint" />     Visual Hint
 							</div>
 							
+							<div id= 'visual-hint' style= 'margin-top: 20px; margin-right:10px; float:left'>
+								<input id = 'thint' type="checkbox" name="thint" value="thint" />     Textual Hint
+							</div>
+							
 							<div id= 'end-game' style= 'margin-top: 20px; margin-right:10px;float:left'>
 								<input id = 'end-game' type="button" name="end-game" value="end-game" /> 
 							</div>
@@ -229,16 +233,33 @@
 			<div id='selection' class = 'container' style='font-size: 20px'>
 					<input type="radio" name="level" id='easy' value="EASY">13 pieces<br><br>
 					<input type="radio" name="level" id='hard' value="Hard">56 pieces<br><br>
-					<input type="radio" name="level" id='easyend' value="EASYEND">13 pieces answer<br><br>
-					<input type="radio" name="level" id='hardend' value="HARDEND">56 pieces answer<br><br>
-					<input type="radio" name="level" id='custom' value="Custom">User input<br><br>
-					<input type="radio" name="level" id='customend' value="CustomEND">User input answer<br><br>
-					File Path: <br>
-					<textarea name ="paths" id="paths" rows="10" cols="100"> </textarea><br><br>
-					<input type="submit" value="Submit" id='submit' style= "width: 80px; height: 60px; font-size: 20px">
+					<input type="radio" name="level" id='custom' value="Custom">User input<br><br>	
 			</div>
-	
+		</div>
 	</div>
+	<div id='submitFile' style = 'display: none;'>
+			<div id='submitFilehere' class = 'container' style='font-size: 20px'>
+				File Path: <br>
+				<textarea name ="paths" id="paths" rows="10" cols="100"> </textarea>
+			</div>
+	</div>
+	<div id='showAns' style = 'display: none;'>
+			<div id='showAnswerDiv'  class = 'container' style = 'font-size: 20px'>
+			<input type="checkbox" name="showAnswer" id='showAnswer' value="showAnswer">show answer<br><br>
+		</div>
+	</div>
+		
+	<div id='submitChoice' style = 'display: none;'>	
+			<div id='submitChoiceHere' class = 'container' style='font-size: 20px'>
+				<input type="submit" value="Submit" id='submit' style= "width: 80px; height: 60px; font-size: 20px">
+			</div>
+	</div>
+
+
+
+
+
+
 	<div id="browser-dialog" style='display: none;' title="Incompatible Browser">
 	<p>This website uses WebGL to render 3D images. Currently only Chrome and Firefox browsers are supported. Using other browsers may slow down or crash your operating system.</p>
 	</div>
