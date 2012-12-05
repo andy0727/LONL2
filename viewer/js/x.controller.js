@@ -366,6 +366,43 @@ function thresholdFibers(event, ui) {
 }
 //LONI TEAM 2 Mengyi Zhu
 function InitialEvents(){
+	ren3d.interactor.onMouseMove = function(event)
+    {
+	
+		if( ren3d.interactor.leftButtonDown &&  jQuery('#drag').attr('checked'))
+		{
+			if (ren3d.get(id)&& ren3d.get(id).caption != "visual_hint"){
+				camera_view_zoom = ren3d.camera.view.getValueAt(2,3);
+				console.log(camera_view_zoom);
+				end_pos = ren3d.interactor.mousePosition;
+				if(camera_view_zoom < 0)
+					end_coordinate = new X.matrix ([[(end_pos[0] - pos[0])*camera_view_zoom/-760 , 
+											     (-(end_pos[1] - pos[1])*camera_view_zoom/-760) ,
+												 0]]);
+				else
+					end_coordinate = new X.matrix ([[(end_pos[0] - pos[0])/20,
+													-(end_pos[1] - pos[1])*20
+													,0 ]]);
+				rotation_matrix = new X.matrix ([
+									[ren3d.camera.view.getValueAt(0,0), ren3d.camera.view.getValueAt(0,1), ren3d.camera.view.getValueAt(0,2)],
+									[ren3d.camera.view.getValueAt(1,0), ren3d.camera.view.getValueAt(1,1), ren3d.camera.view.getValueAt(1,2)],
+									[ren3d.camera.view.getValueAt(2,0), ren3d.camera.view.getValueAt(2,1), ren3d.camera.view.getValueAt(2,2)]]);	
+			
+				translate_vector =new X.matrix(end_coordinate.multiply(rotation_matrix));
+				
+				transform_matrix = new X.matrix ([[1,0,0,translate_vector.getValueAt(0,0)], 
+											[0,1,0,translate_vector.getValueAt(0,1)],
+											[0,0,1,translate_vector.getValueAt(0,2)],
+											[0,0,0,1]]);
+				//window.console.log(ren3d.camera.view);							
+				ren3d.get(id).transform.matrix= new X.matrix(ren3d.get(id).transform.matrix.multiply(transform_matrix));
+				ren3d.get(id).color = old_color;
+				ren3d.get(id).opacity = old_opacity;
+			}
+		}
+					pos = ren3d.interactor.mousePosition;	 
+	};
+	
 	ren3d.interactor.onMouseDown = function(left,middle,right)
     {   
 	    //if the action is dragging, record some points.
@@ -409,44 +446,6 @@ function InitialEvents(){
 		}
 	};
 	
-	
-    
-	ren3d.interactor.onMouseMove = function(event)
-    {
-	
-		if( ren3d.interactor.leftButtonDown &&  jQuery('#drag').attr('checked'))
-		{
-				end_pos = ren3d.interactor.mousePosition;
-						 
-			if (ren3d.get(id)&& ren3d.get(id).caption != "visual_hint"){
-				camera_view_zoom = ren3d.camera.view.getValueAt(2,3);
-				if(camera_view_zoom < 0)
-					end_coordinate = new X.matrix ([[(end_pos[0] - pos[0])*camera_view_zoom/-760 , 
-											     (-(end_pos[1] - pos[1])*camera_view_zoom/-760) ,
-												 0]]);
-				else
-					end_coordinate = new X.matrix ([[(end_pos[0] - pos[0])/20,
-													-(end_pos[1] - pos[1])*20
-													,0 ]]);
-				rotation_matrix = new X.matrix ([
-									[ren3d.camera.view.getValueAt(0,0), ren3d.camera.view.getValueAt(0,1), ren3d.camera.view.getValueAt(0,2)],
-									[ren3d.camera.view.getValueAt(1,0), ren3d.camera.view.getValueAt(1,1), ren3d.camera.view.getValueAt(1,2)],
-									[ren3d.camera.view.getValueAt(2,0), ren3d.camera.view.getValueAt(2,1), ren3d.camera.view.getValueAt(2,2)]]);	
-			
-				translate_vector =new X.matrix(end_coordinate.multiply(rotation_matrix));
-				
-				transform_matrix = new X.matrix ([[1,0,0,translate_vector.getValueAt(0,0)], 
-											[0,1,0,translate_vector.getValueAt(0,1)],
-											[0,0,1,translate_vector.getValueAt(0,2)],
-											[0,0,0,1]]);
-				//window.console.log(ren3d.camera.view);							
-				ren3d.get(id).transform.matrix= new X.matrix(ren3d.get(id).transform.matrix.multiply(transform_matrix));
-				ren3d.get(id).color = old_color;
-				ren3d.get(id).opacity = old_opacity;
-				pos = ren3d.interactor.mousePosition;
-			}
-		}
-	};
 }
 
 function SwitchRotateorDrag() {
