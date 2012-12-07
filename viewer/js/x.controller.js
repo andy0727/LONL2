@@ -366,16 +366,15 @@ function thresholdFibers(event, ui) {
 }
 //LONI TEAM 2 Mengyi Zhu
 function InitialEvents(){
-
 	ren3d.interactor.onMouseMove = function(event)
     {
-		end_pos = ren3d.interactor.mousePosition;
+	
 		if( ren3d.interactor.leftButtonDown &&  jQuery('#drag').attr('checked'))
 		{
 			if (ren3d.get(id)&& ren3d.get(id).caption != "visual_hint"){
 				camera_view_zoom = ren3d.camera.view.getValueAt(2,3);
-				
-				
+				console.log(camera_view_zoom);
+				end_pos = ren3d.interactor.mousePosition;
 				if(camera_view_zoom < 0)
 					end_coordinate = new X.matrix ([[(end_pos[0] - pos[0])*camera_view_zoom/-760 , 
 											     (-(end_pos[1] - pos[1])*camera_view_zoom/-760) ,
@@ -384,7 +383,6 @@ function InitialEvents(){
 					end_coordinate = new X.matrix ([[(end_pos[0] - pos[0])/20,
 													-(end_pos[1] - pos[1])*20
 													,0 ]]);
-													
 				rotation_matrix = new X.matrix ([
 									[ren3d.camera.view.getValueAt(0,0), ren3d.camera.view.getValueAt(0,1), ren3d.camera.view.getValueAt(0,2)],
 									[ren3d.camera.view.getValueAt(1,0), ren3d.camera.view.getValueAt(1,1), ren3d.camera.view.getValueAt(1,2)],
@@ -396,13 +394,13 @@ function InitialEvents(){
 											[0,1,0,translate_vector.getValueAt(0,1)],
 											[0,0,1,translate_vector.getValueAt(0,2)],
 											[0,0,0,1]]);
-											
+				//window.console.log(ren3d.camera.view);							
 				ren3d.get(id).transform.matrix= new X.matrix(ren3d.get(id).transform.matrix.multiply(transform_matrix));
 				ren3d.get(id).color = old_color;
 				ren3d.get(id).opacity = old_opacity;
 			}
 		}
-		pos = ren3d.interactor.mousePosition;	 
+					pos = ren3d.interactor.mousePosition;	 
 	};
 	
 	ren3d.interactor.onMouseDown = function(left,middle,right)
@@ -465,17 +463,6 @@ function SwitchVisual() {
 	for(i =0 ; i<number_of_piece; i++)
 		if(hint_meshes[i])
 			hint_meshes[i].visible = jQuery('#vhint').attr('checked');
-
-    //calculate hint time
-    if(jQuery('#vhint').attr('checked'))
-    {
-        vhint_time = new Date().getTime();
-    }
-    else
-    {
-        time_now = new Date().getTime();
-        total_hint_time += time_now - vhint_time;
-    }
 	
 }
 
@@ -505,53 +492,25 @@ function SwitchTextual() {
         }
     }
   }
-
-    if(jQuery('#thint').attr('checked'))
-    {
-        thint_time = new Date().getTime();
-    }
-    else
-    {
-        time_now = new Date().getTime();
-        total_hint_time += time_now - thint_time;
-    }
   
 }
 
 
-//Ding: score is deducted by 1 point for every 5 seconds when hint is shown
-function CalculateHintScore(){
-
-    if(jQuery('#vhint').attr('checked'))
-    {
-        time_now = new Date().getTime();
-        total_hint_time += time_now - vhint_time;
-    }
-
-    if(jQuery('#thint').attr('checked'))
-    {
-        time_now = new Date().getTime();
-        total_hint_time += time_now - thint_time;
-    }
-
-	return 0 - (total_hint_time / 10000);
-}
 
 function CalculateTimeScore(){
-    var end_time =new Date().getTime();
-    var time_difference = end_time - start_time;
-    var time_allowance = 30*60*1000; //half an hour
-    
-    if (time_difference < time_allowance)
-       return 100;
-       
-    else if (time_difference > time_allowance && time_difference < 4*time_allowance)
-        return Math.round ((1- (time_difference- time_allowance) / (3*time_allowance)) * 1000)/10;
-        
-    else 
-        return 0;
+	var end_time =new Date().getTime();
+	var time_difference = end_time - start_time;
+	var time_allowance = 30*60*1000; //half an hour
+	
+	if (time_difference < time_allowance)
+	   return 100;
+	   
+	else if (time_difference > time_allowance && time_difference < 4*time_allowance)
+		return Math.round ((1- (time_difference- time_allowance) / (3*time_allowance)) * 1000)/10;
+		
+	else 
+		return 0;
 }
-
 function CalculateDistance(id1, id2 , error_range){
 	if 	((Math.abs (ren3d.get(id1).transform.matrix.getValueAt(0,3) - ren3d.get(id2).transform.matrix.getValueAt(0,3)) > error_range) || 
 			(Math.abs (ren3d.get(id1).transform.matrix.getValueAt(1,3) - ren3d.get(id2).transform.matrix.getValueAt(1,3)) > error_range) ||
@@ -588,18 +547,16 @@ function CalculateCombinationScore(){
 	return 100 - Math.round(cur_mini * (100/ (number_of_piece - 1))* 10)/ 10;
 }
 
-
 function CalculateScores() {
 	
 	
-    var score = CalculateHintScore() + (CalculateTimeScore() + CalculateCombinationScore())/ 2;
-
-location.reload();
+    var score = (CalculateTimeScore() + CalculateCombinationScore())/ 2;
+	//this need to be modified because the time is only one of the factor.
+	
 	window.alert("Congratulation! your score is: "+ score + "\n" + 
 	             "time score: "+ CalculateTimeScore() +
 				 "\ncombo score: "+ CalculateCombinationScore()+"\n" );
-
-
+	
 }
 
 
