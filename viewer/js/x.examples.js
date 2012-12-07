@@ -123,7 +123,10 @@ function loadCustom(isRandom) {
   };
 
   //LONI TEAM 2 add a timestamp
-  start_time= new Date().getTime();
+  total_hint_time = 0;
+  vhint_time = 0;
+  thint_time = 0;
+  start_time = new Date().getTime();
 }
 
 function loadShape(isRandom) {
@@ -198,6 +201,9 @@ function loadShape(isRandom) {
   };  
   
   //LONI TEAM 2 add a timestamp
+  total_hint_time = 0;
+  vhint_time = 0;
+  thint_time = 0;
   start_time= new Date().getTime();
 }
 
@@ -273,6 +279,9 @@ function loadShapeSimple(isRandom) {
   };
   
   //LONI TEAM 2 add a timestamp
+  total_hint_time = 0;
+  vhint_time = 0;
+  thint_time = 0;
   start_time= new Date().getTime();
 }
 
