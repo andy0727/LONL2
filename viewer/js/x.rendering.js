@@ -27,7 +27,7 @@ function initializeRenderers(){
 */
    
 	
-  //CS 130 LONi mengyi zhu : initial the dragging and selecting event.
+  //CS 130 LONi : initial the dragging and selecting event.
   pos = ren3d.interactor.mousePosition;
   id = ren3d.pick(pos[0],pos[1]);
   old_color =[0,0,0];

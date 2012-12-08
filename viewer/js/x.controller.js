@@ -271,7 +271,9 @@ function toggleLabelmapVisibility() {
 
 //
 // MESH
-// Modified by Loni team 2 Mengyi Zhu
+// Modified by Loni team 2 
+// All the functions are modified to change the opacity, color and show and hide for a selected piece.
+// Except the last three are never used.
 function toggleMeshVisibility() {
 
   if (!ren3d.get(id)) {
@@ -364,18 +366,26 @@ function thresholdFibers(event, ui) {
   
 
 }
-//LONI TEAM 2 Mengyi Zhu
+
+
+//LONI TEAM 2
+//This is a function that introduce the multiple event handler to handle
+// the interaction of the user. Such as dragging, selecting pieces.
 function InitialEvents(){
 
 	ren3d.interactor.onMouseMove = function(event)
     {
+	    //record the second position of te mouse.
 		end_pos = ren3d.interactor.mousePosition;
+		
 		if( ren3d.interactor.leftButtonDown &&  jQuery('#drag').attr('checked'))
 		{
+			//If the peice selected is not visual hint
 			if (ren3d.get(id)&& ren3d.get(id).caption != "visual_hint"){
+				//get the camera zoom value, then use it to switch the difference of displacement.
 				camera_view_zoom = ren3d.camera.view.getValueAt(2,3);
-				
-				
+				// the unit is switched from pixels to coordinate units. This is done by a magic number
+				// -760 from practical testing.
 				if(camera_view_zoom < 0)
 					end_coordinate = new X.matrix ([[(end_pos[0] - pos[0])*camera_view_zoom/-760 , 
 											     (-(end_pos[1] - pos[1])*camera_view_zoom/-760) ,
@@ -384,27 +394,32 @@ function InitialEvents(){
 					end_coordinate = new X.matrix ([[(end_pos[0] - pos[0])/20,
 													-(end_pos[1] - pos[1])*20
 													,0 ]]);
-													
+				
+				//get the camera's rotation matrix. it will be used to calculate the real movement of pieces in coordinates
 				rotation_matrix = new X.matrix ([
 									[ren3d.camera.view.getValueAt(0,0), ren3d.camera.view.getValueAt(0,1), ren3d.camera.view.getValueAt(0,2)],
 									[ren3d.camera.view.getValueAt(1,0), ren3d.camera.view.getValueAt(1,1), ren3d.camera.view.getValueAt(1,2)],
 									[ren3d.camera.view.getValueAt(2,0), ren3d.camera.view.getValueAt(2,1), ren3d.camera.view.getValueAt(2,2)]]);	
 			
+				//this is the step of transformation
 				translate_vector =new X.matrix(end_coordinate.multiply(rotation_matrix));
 				
+				//make a new transform matrix based on the calculation
 				transform_matrix = new X.matrix ([[1,0,0,translate_vector.getValueAt(0,0)], 
 											[0,1,0,translate_vector.getValueAt(0,1)],
 											[0,0,1,translate_vector.getValueAt(0,2)],
 											[0,0,0,1]]);
-											
+				//add the change of dispacement to the original matrix of the piece.
 				ren3d.get(id).transform.matrix= new X.matrix(ren3d.get(id).transform.matrix.multiply(transform_matrix));
-				ren3d.get(id).color = old_color;
-				ren3d.get(id).opacity = old_opacity;
+				
 			}
 		}
+		//record the first position of the mouse.
 		pos = ren3d.interactor.mousePosition;	 
 	};
 	
+	
+	//this handler record the piece selected, only peices that are not visual hints.
 	ren3d.interactor.onMouseDown = function(left,middle,right)
     {   
 	    //if the action is dragging, record some points.
@@ -423,6 +438,8 @@ function InitialEvents(){
 		
     };
 	
+	//This handler turn the pieces color back and also does the work to check if 
+	//the movement result in any pieces combined. 
 	ren3d.interactor.onMouseUp = function(left,middle,right)
     {		
 		if (ren3d.get(id) && ren3d.get(id).caption != "visual_hint"){
@@ -450,6 +467,7 @@ function InitialEvents(){
 	
 }
 
+//will be called when drag checkbox is checked
 function SwitchRotateorDrag() {
 	if(jQuery('#drag').attr('checked'))
 		ren3d.camera.rotationenable = false;
@@ -457,6 +475,7 @@ function SwitchRotateorDrag() {
 		ren3d.camera.rotationenable = true;
 }
 
+//will be called if visual hint is turned on
 function SwitchVisual() {
 	
 	if(!hint_meshes)
@@ -537,6 +556,7 @@ function CalculateHintScore(){
 	return 0 - (total_hint_time / 10000);
 }
 
+//Calculate the time score.
 function CalculateTimeScore(){
     var end_time =new Date().getTime();
     var time_difference = end_time - start_time;
@@ -552,6 +572,8 @@ function CalculateTimeScore(){
         return 0;
 }
 
+//a helper function that find the piece that is most closed to others.
+// Using it then to calculate the combination score
 function CalculateDistance(id1, id2 , error_range){
 	if 	((Math.abs (ren3d.get(id1).transform.matrix.getValueAt(0,3) - ren3d.get(id2).transform.matrix.getValueAt(0,3)) > error_range) || 
 			(Math.abs (ren3d.get(id1).transform.matrix.getValueAt(1,3) - ren3d.get(id2).transform.matrix.getValueAt(1,3)) > error_range) ||
@@ -566,6 +588,7 @@ function CalculateDistance(id1, id2 , error_range){
 	
 }
 
+//calculating scores based on the combination
 function CalculateCombinationScore(){
 	var cur_mini= -1;
 	var cur_id = mesh_ids[0];
@@ -588,13 +611,10 @@ function CalculateCombinationScore(){
 	return 100 - Math.round(cur_mini * (100/ (number_of_piece - 1))* 10)/ 10;
 }
 
-
+//put all kinds of scores together.
 function CalculateScores() {
-	
-	
     var score = CalculateHintScore() + (CalculateTimeScore() + CalculateCombinationScore())/ 2;
-
-location.reload();
+	location.reload();
 	window.alert("Congratulation! your score is: "+ score + "\n" + 
 	             "time score: "+ CalculateTimeScore() +
 				 "\ncombo score: "+ CalculateCombinationScore()+"\n" );
